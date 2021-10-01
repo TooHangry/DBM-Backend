@@ -16,20 +16,20 @@ App:
 2. Run `python3 run.py` to launch the dev server 
 
 Structure:
-.
-|__ run.py
-|__ db
-|__ app
-    |__ init.py (entry point)
-    |__ helpers
-    |   |__ database helpers (all data actions)
-    |   |__ auth helpers (all auth)
-    |__ routes
-        |__ default
-        |__ auth
-        |__ items
-        |__ homes
-        |...
-        ....
-        ....
-        ....
+. \
+|__ run.py \
+|__ db \
+|__ app \
+    |__ init.py (entry point) \
+    |__ helpers \
+    |   |__ database helpers (all data actions) \
+    |   |__ auth helpers (all auth) \
+    |__ routes \
+        |__ default \
+        |__ auth \
+        |__ items \
+        |__ homes \
+        |... \
+        .... \
+        .... \
+        .... \
