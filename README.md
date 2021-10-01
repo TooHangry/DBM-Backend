@@ -20,16 +20,16 @@ Structure:
 |__ run.py \
 |__ db \
 |__ app \
-    |__ init.py (entry point) \
-    |__ helpers \
-    |   |__ database helpers (all data actions) \
-    |   |__ auth helpers (all auth) \
-    |__ routes \
-        |__ default \
-        |__ auth \
-        |__ items \
-        |__ homes \
-        |... \
-        .... \
-        .... \
-        .... \
+    &emsp;|__ init.py (entry point) \
+    &emsp;|__ helpers \
+    &emsp;|   |__ database helpers (all data actions) \
+    &emsp;|   |__ auth helpers (all auth) \
+    &emsp;|__ routes \
+        &emsp;&emsp;|__ default \
+        &emsp;&emsp;|__ auth \
+        &emsp;&emsp;|__ items \
+        &emsp;&emsp;|__ homes \
+        &emsp;&emsp;|... \
+        &emsp;&emsp;.... \
+        &emsp;&emsp;.... \
+        &emsp;&emsp;.... \
