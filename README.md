@@ -22,8 +22,8 @@ Structure:
 |__ app \
     &emsp;|__ init.py (entry point) \
     &emsp;|__ helpers \
-    &emsp;|   |__ database helpers (all data actions) \
-    &emsp;|   |__ auth helpers (all auth) \
+    &emsp;|&emsp;|__ database helpers (all data actions) \
+    &emsp;| &emsp;|__ auth helpers (all auth) \
     &emsp;|__ routes \
         &emsp;&emsp;|__ default \
         &emsp;&emsp;|__ auth \
