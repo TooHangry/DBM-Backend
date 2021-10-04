@@ -28,7 +28,7 @@ def get_user_homes(id):
                             INNER JOIN homes
                             ON user_to_homes.home = homes.id) merged_homes
                 ON users.id = merged_homes.user
-                Where users.id = {}
+                WHERE users.id = {}
                 '''.format(id))
     return serializers.serialize_homes(db.fetchall())
 
