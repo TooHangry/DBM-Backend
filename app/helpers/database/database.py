@@ -5,15 +5,6 @@ import app.helpers.database.serializers as serializers
 connection = sqlite3.connect('db.sqlite3', timeout=10, check_same_thread=False)
 db = connection.cursor()
 
-
-
-
-
-
-
-
-
-
 ################
 # USER QUERIES #
 ################
@@ -25,7 +16,6 @@ def login_current_user(email, password):
                 WHERE email = '{}' AND password = '{}';
                 '''.format(email, password))
     users = serializers.serialize_users(db.fetchall())
-    print('here')
     return users[0] if len(users) > 0 else {}    
     
 
@@ -59,8 +49,6 @@ def get_all_users():
                 ''')
     users = serializers.serialize_users(db.fetchall())
     return users
-
-
 
 ###########################
 # DATABASE INITIALIZATION #
@@ -148,5 +136,3 @@ def initialize_database():
         print('User To Homes already added')
 
     connection.commit()        
-
-    
