@@ -1,15 +1,71 @@
-from os import path
 import sqlite3
+import app.helpers.database.serializers as serializers
 
-connection = sqlite3.connect('db.sqlite3', timeout=10)
+# Running on a single thread
+connection = sqlite3.connect('db.sqlite3', timeout=10, check_same_thread=False)
 db = connection.cursor()
 
 
-def initData():
-    ###########################
-    # DATABASE INITIALIZATION #
-    ###########################
 
+
+
+
+
+
+
+
+################
+# USER QUERIES #
+################
+
+def login_current_user(email, password):
+    db.execute('''
+                SELECT *
+                FROM users
+                WHERE email = '{}' AND password = '{}';
+                '''.format(email, password))
+    users = serializers.serialize_users(db.fetchall())
+    print('here')
+    return users[0] if len(users) > 0 else {}    
+    
+
+def get_user_homes(id):
+    db.execute('''
+                SELECT home, is_admin, nickname, users.id
+                FROM users
+                INNER JOIN (SELECT *
+                            FROM user_to_homes
+                            INNER JOIN homes
+                            ON user_to_homes.home = homes.id) merged_homes
+                ON users.id = merged_homes.user
+                Where users.id = {}
+                '''.format(id))
+    return serializers.serialize_homes(db.fetchall())
+
+def get_user_by_id(id):
+    db.execute('''
+                SELECT * 
+                FROM users
+                WHERE id = {}
+                '''.format(id))
+    users = serializers.serialize_users(db.fetchall())
+    return users[0] if len(users) > 0 else {}
+
+
+def get_all_users():
+    db.execute('''
+                SELECT * 
+                FROM users
+                ''')
+    users = serializers.serialize_users(db.fetchall())
+    return users
+
+
+
+###########################
+# DATABASE INITIALIZATION #
+###########################
+def initialize_database():
     # User table
     # You do not need to specify the primary key or a timestamp when inserting
     db.execute('''
@@ -27,7 +83,6 @@ def initData():
 
     # Users to Home Table
     #   Relates a user to a home with admin information
-    # REMOVE THE UNIQUE CONSTRAINT FOR HOME (just so test data is only entered once)
     db.execute('''
                 CREATE TABLE IF NOT EXISTS user_to_homes (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,9 +90,9 @@ def initData():
                     home INTEGER NOT NULL,
                     is_admin CHAR(1) NOT NULL DEFAULT('F'),
 
-                    UNIQUE(home),
                     FOREIGN KEY(user) REFERENCES user(id),
-                    FOREIGN KEY(home) REFERENCES home(id)
+                    FOREIGN KEY(home) REFERENCES home(id),
+                    UNIQUE(user, home)
                 )
                 ''')
 
@@ -70,8 +125,8 @@ def initData():
             INSERT INTO homes (nickname) 
             VALUES
             ('Robert''s Residence'),
-            ('Tyler''s Townhome'),
-            ('Brendon''s Barndemenium')
+            ('Brendon''s Barndemenium'),
+            ('Tyler''s Townhome')
         ''')
         connection.commit()
     except:
@@ -79,11 +134,14 @@ def initData():
 
     try:
         db.execute('''
-            INSERT INTO user_to_homes (user, home) 
+            INSERT INTO user_to_homes (user, home, is_admin) 
             VALUES
-            (1, 1),
-            (2, 2),
-            (3, 3)
+            (1, 1, 'T'),
+            (1, 3, 'F'),
+            (1, 2, 'F'),
+            (2, 2, 'T'),
+            (2, 3, 'F'),
+            (3, 3, 'T')
         ''')
         connection.commit()
     except:

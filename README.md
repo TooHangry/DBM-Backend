@@ -15,7 +15,7 @@ App:
 1. Ensure virtual environment is activated 
 2. Run `python3 run.py` to launch the dev server 
 
-Structure:
+Structure: \
 . \
 |__ run.py \
 |__ db \
@@ -32,4 +32,4 @@ Structure:
         &emsp;&emsp;|... \
         &emsp;&emsp;.... \
         &emsp;&emsp;.... \
-        &emsp;&emsp;.... \
+        &emsp;&emsp;....

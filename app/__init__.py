@@ -1,7 +1,6 @@
-from sqlite3.dbapi2 import connect
 from flask import Flask, request
 from flask_cors import CORS
-from app.helpers.database.database import initData
+from app.helpers.database import database
 
 # Creates a flask instance with cross-origin resource sharing
 app = Flask(__name__)
@@ -14,13 +13,12 @@ cors = CORS(app, resources={r'/*': {"origins": '*'}})
 
 # Import modules and routes
 from app.routes.default.controller import default_routes as default_module
+from app.routes.user.controller import user_routes as user_module
 app.register_blueprint(default_module)
+app.register_blueprint(user_module)
 
 
-initData()
-
-
-
+database.initialize_database()
 
 
 ###################
