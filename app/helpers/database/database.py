@@ -5,6 +5,12 @@ import app.helpers.database.serializers as serializers
 connection = sqlite3.connect('db.sqlite3', timeout=10, check_same_thread=False)
 db = connection.cursor()
 
+
+# SELECT home_items.item_name, home_items.quantity, categories.category
+# from home_items
+# Join categories on categories.id = home_items.category
+# WHERE home = 1 AND home_items.category = 1
+
 ################
 # USER QUERIES #
 ################
@@ -93,6 +99,29 @@ def initialize_database():
                     nickname VARCHAR(128) UNIQUE
                 )
                 ''')
+
+    # Home Items table
+    db.execute('''
+                CREATE TABLE IF NOT EXISTS home_items (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    home INTEGER NOT NULL,
+                    quantity INTEGER,
+                    item_name VARCHAR(64),
+                    category INTEGER NOT NULL,
+
+                    FOREIGN KEY(home) REFERENCES homes(id)
+                    FOREIGN KEY(category) REFERENCES categories(id)
+                )
+                ''')
+
+    # Home Items table
+    db.execute('''
+                CREATE TABLE IF NOT EXISTS categories (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    category VARCHAR(64),
+                    UNIQUE(category)
+                )
+                ''')
     
 
     # Insert Dummy Data
@@ -134,5 +163,33 @@ def initialize_database():
         connection.commit()
     except:
         print('User To Homes already added')
+
+    try:
+        db.execute('''
+            INSERT INTO categories (category) 
+            VALUES
+            ('Food'),
+            ('Media'),
+            ('Clothing'),
+            ('Stationary'),
+            ('Toys'),
+            ('Kitchenware')
+        ''')
+        connection.commit()
+    except:
+        print('Categories already added')
+
+    # try:
+    db.execute('''
+        INSERT INTO home_items (home, quantity, item_name, category) 
+        VALUES
+        (1, 5, 'Apple', 1),
+        (1, 2, 'Peach', 1),
+        (1, 1, 'Bread', 1),
+        (1, 69, 'Brendon', 1),
+    ''')
+    connection.commit()
+    # except:
+    #     print('Items already added')
 
     connection.commit()        
