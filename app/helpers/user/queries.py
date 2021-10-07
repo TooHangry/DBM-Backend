@@ -1,6 +1,7 @@
 from flask import abort
 from app.helpers.user import serializers
 from app.models.user import User
+from app.helpers.item import queries as item_queries
 
 
 def create_user(db, connection, email, fname, lname, hashed_password, token):
@@ -24,9 +25,10 @@ def login_current_user(db, email, password):
     if user:
         homes = get_user_homes(db, user['id'])
         user['homes'] = homes
+        categories = item_queries.get_all_categories(db)
+        user['categories'] = categories
         return user
     abort(404)
-
 
 def login_from_token(db, token):
     db.execute('''
@@ -39,6 +41,8 @@ def login_from_token(db, token):
     if user:
         homes = get_user_homes(db, user['id'])
         user['homes'] = homes
+        categories = item_queries.get_all_categories(db)
+        user['categories'] = categories
         return user
     abort(404)
 

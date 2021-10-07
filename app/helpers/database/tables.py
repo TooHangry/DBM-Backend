@@ -102,6 +102,13 @@ def populate_tables(db, connection):
             ('Clothing'),
             ('Stationary'),
             ('Toys'),
+            ('Tools'),
+            ('Books'),
+            ('Beverages'),
+            ('Electronics'),
+            ('Furniture'),
+            ('Games'),
+            ('Vehicles'),
             ('Kitchenware')
         ''')
         connection.commit()
@@ -114,11 +121,7 @@ def populate_tables(db, connection):
             VALUES
             (1, 5, 'Apple', 1, 2),
             (1, 2, 'Peach', 1, 2),
-            (1, 1, 'Bread', 1, 0),
-            (1, 1, 'Lord of the Rings', 2, 0),
-            (1, 1, 'Star Wars', 2, 0),
-            (1, 15, 'Pencil', 4, 0),
-            (1, 300, 'Paper', 4, 20)
+            (1, 1, 'Bread', 1, 0)
         ''')
         connection.commit()
     except:
