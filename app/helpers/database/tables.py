@@ -30,7 +30,6 @@ def create_tables(db):
                 )
                 ''')
 
-
     # Home table
     # REMOVE THE UNIQUE CONSTRAINT FOR NICKNAME (just so test data is only entered once)
     db.execute('''
@@ -59,7 +58,7 @@ def create_tables(db):
     db.execute('''
                 CREATE TABLE IF NOT EXISTS categories (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    category VARCHAR(64),
+                    category VARCHAR(64) NOT NULL,
                     UNIQUE(category)
                 )
                 ''')
@@ -127,4 +126,4 @@ def populate_tables(db, connection):
     except:
         print('Items already added')
 
-    connection.commit()      
+    connection.commit()
