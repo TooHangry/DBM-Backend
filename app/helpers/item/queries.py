@@ -12,6 +12,6 @@ def get_home_items(db, home_id, category_id):
             SELECT home_items.item_name, home_items.quantity, categories.category, home_items.alert_threshold
             FROM home_items
             JOIN categories ON categories.id = home_items.category
-            WHERE home_items.home = {} AND home_items.category = {}
-            '''.format(home_id, category_id))
+            WHERE home_items.home = ? AND categories.category = ?
+            ''', (home_id, category_id))
     return serializers.serialize_home_items(db.fetchall())

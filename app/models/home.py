@@ -1,11 +1,11 @@
 class UserToHome:
     id: int
-    is_admin: str
+    is_admin: bool
     nickname: str
 
     def __init__(self, home):
         self.id = home[0] 
-        self.is_admin = home[1]
+        self.is_admin = False if home[1] != 'T' else True
         self.nickname = home[2]  
     
     def serialize(self):
@@ -26,5 +26,5 @@ class Home:
     def serialize(self):
         return {
             'id': self.id,
-            'nickname': self.nickname
+            'nickname': self.nickname,
         }

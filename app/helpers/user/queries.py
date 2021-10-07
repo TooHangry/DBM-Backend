@@ -1,14 +1,47 @@
+from flask import abort
 from app.helpers.user import serializers
+from app.models.user import User
+
+
+def create_user(db, connection, email, fname, lname, hashed_password, token):
+    db.execute('''
+                INSERT INTO users (first_name, last_name, email, password, UUID_token)
+                VALUES
+                (?, ?, ?, ?, ?)
+                ''', (fname, lname, email, hashed_password, token))
+    connection.commit()
+
 
 def login_current_user(db, email, password):
     db.execute('''
-                SELECT *
+                SELECT id, first_name, last_name, email, date_joined, UUID_token
                 FROM users
-                WHERE email = '{}' AND password = '{}';
-                '''.format(email, password))
-    users = serializers.serialize_users(db.fetchall())
-    return users[0] if len(users) > 0 else {}    
+                WHERE email = ? AND password = ?;
+                ''', (email, password))
     
+    users = serializers.serialize_users(db.fetchall())
+    user: dict = users[0] if len(users) > 0 else abort(404)
+    if user:
+        homes = get_user_homes(db, user['id'])
+        user['homes'] = homes
+        return user
+    abort(404)
+
+
+def login_from_token(db, token):
+    db.execute('''
+                SELECT id, first_name, last_name, email, date_joined, UUID_token
+                FROM users
+                WHERE UUID_token = '{}';
+                '''.format(token))
+    users = serializers.serialize_users(db.fetchall())
+    user: dict = users[0] if len(users) > 0 else abort(404)
+    if user:
+        homes = get_user_homes(db, user['id'])
+        user['homes'] = homes
+        return user
+    abort(404)
+
 def get_user_homes(db, id):
     db.execute('''
                 SELECT home, is_admin, nickname, users.id
@@ -21,6 +54,7 @@ def get_user_homes(db, id):
                 WHERE users.id = {}
                 '''.format(id))
     return serializers.serialize_homes(db.fetchall())
+
 
 def get_user_by_id(db, id):
     db.execute('''

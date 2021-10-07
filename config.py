@@ -18,5 +18,7 @@ CSRF_SESSION_KEY = "6e!a4^2@ed09ocp)@=sryko%=5hw$1q*3ykk5!(1z21!9+90x^"
 # Secret key for cookies
 SECRET_KEY = "e#c6464=_mlpc5isu0=ce_8vp5ftefs3yyltz6p-a1ljn*jx)@"
 
+HASH_KEY = b'\x8a\xcdB\xe3?+\x92x3,\xbb\x9e\xf2\xed\xc1a\xb0\x9f\xb1\xfax\xfa\xc4\x94f\x06\x93\xe0jPMQ'
+
 # Folders for user uploads
 UPLOAD_FOLDER = '{}/uploads/'.format(BASE_DIR)

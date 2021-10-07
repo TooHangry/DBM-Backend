@@ -1,5 +1,5 @@
 import sqlite3
-
+import itertools
 # Running on a single thread
 connection = sqlite3.connect('db.sqlite3', timeout=10, check_same_thread=False)
 db = connection.cursor()
@@ -15,8 +15,14 @@ from app.helpers.database import tables
 ################
 # USER QUERIES #
 ################
+def create_user(email, fname, lname, hashed_password, token):
+    return user_queries.create_user(db, connection, email, fname, lname, hashed_password, token)
+
 def login_current_user(email, password):
     return user_queries.login_current_user(db, email, password)
+
+def login_from_token(token):
+    return user_queries.login_from_token(db, token)
 
 def get_user_homes(id):
     return user_queries.get_user_homes(db, id)
@@ -27,11 +33,24 @@ def get_user_by_id(id):
 def get_all_users():
     return user_queries.get_user_by_id(db)
 
+
 ################
 # HOME QUERIES #
 ################
 def get_all_homes():
     return home_queries.get_all_homes(db)
+
+def get_home(id):
+    return home_queries.get_home(db, id)
+
+def get_home_info(home_id):
+    home = get_home(home_id)
+    categories = home_queries.get_home_categories(db, home_id)
+    home['categories'] = categories if len(categories) > 0 else []
+    items = [get_home_category_items(home_id, cat) for cat in categories]
+    flattened_items = list(itertools.chain(*items))
+    home['items'] = flattened_items if len(flattened_items) > 0 else []
+    return home
 
 ################
 # ITEM QUERIES #

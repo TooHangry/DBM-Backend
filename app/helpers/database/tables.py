@@ -8,9 +8,11 @@ def create_tables(db):
                     last_name VARCHAR(128) NOT NULL,
                     email VARCHAR(128) NOT NULL,
                     date_joined DATETIME DEFAULT(CURRENT_TIMESTAMP),
-                    password VARCHAR(256) NOT NULL,
+                    password BLOB NOT NULL,
+                    UUID_token BLOB NOT NULL,
 
-                    UNIQUE(email)
+                    UNIQUE(email),
+                    UNIQUE(UUID_token)
                 )
                 ''')
 
@@ -64,18 +66,6 @@ def create_tables(db):
 
 
 def populate_tables(db, connection):
-    try:
-        db.execute('''
-            INSERT INTO users (first_name, last_name, email, password) 
-            VALUES
-            ('Robert', 'Connolly', 'rec73@uakron.edu', 'password1'),
-            ('Brendon', 'Lovejoy', 'bjl66@uakron.edu', 'password2'),
-            ('Tyler', 'Moff', 'tdm105@uakron.edu', 'password3')
-        ''')
-        connection.commit()
-    except:
-        print('Users already added')
-
     try:
         db.execute('''
             INSERT INTO homes (nickname) 
