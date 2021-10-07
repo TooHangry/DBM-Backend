@@ -28,8 +28,8 @@ class HomeItem:
         self.item_name = item[0]
         self.quantity = item[1]  
         self.category = item[2]  
-        self.alert_threshold = item[3]  
-    
+        self.alert_threshold = item[3]
+
     def serialize(self):
         return {
             'item': self.item_name,

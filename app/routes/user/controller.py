@@ -5,7 +5,6 @@ from app.helpers.database import database
 from app.helpers.user import helpers
 user_routes = Blueprint('user', __name__, url_prefix='')
 
-
 @user_routes.route('/login', methods=['POST'])
 def login():
     email = request.form['email']
@@ -23,7 +22,6 @@ def login_token():
         return json.dumps(database.login_from_token(token))
     abort(404)
 
-
 @user_routes.route('/signup', methods=['POST'])
 def signup():
     email = request.form['email']
@@ -39,16 +37,13 @@ def signup():
         return json.dumps(database.login_current_user(email, hashed_password))
     abort(404)
 
-
 @user_routes.route('/all', methods=['GET'])
 def get_users():
     return json.dumps(database.get_all_users())
 
-
 @user_routes.route('/user/<id>', methods=['GET'])
 def get_current_user(id):
     return json.dumps(database.get_user_by_id(id))
-
 
 @user_routes.route('/user/<id>/homes', methods=['GET'])
 def get_current_user_homes(id):
