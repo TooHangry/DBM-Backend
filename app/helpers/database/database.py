@@ -67,7 +67,6 @@ def get_category_id(category_name):
 
 def get_all_categories():
     return item_queries.get_all_categories(db)
-    
 def add_item(home, name, quantity, threshold, category_name):
     category_id = get_category_id(category_name)
     category_id = 1 if len(category_id) < 1 else int(category_id[0])
