@@ -20,6 +20,4 @@ def create_home():
     invite_list = json.loads(data['invites'])
     admin = data['admin']
 
-    print(name, invite_list)
-
     return json.dumps(database.create_new_home(name, admin, invite_list))

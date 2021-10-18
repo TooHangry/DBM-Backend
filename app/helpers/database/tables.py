@@ -66,31 +66,6 @@ def create_tables(db):
 
 
 def populate_tables(db, connection):
-    # db.execute('''
-    #     INSERT INTO homes (nickname) 
-    #     VALUES
-    #     ('Robert''s Residence'),
-    #     ('Brendon''s Barndemenium'),
-    #     ('Tyler''s Townhome')
-    # ''')
-    # connection.commit()
-    print('Homes already added')
-
-    try:
-        db.execute('''
-            INSERT INTO user_to_homes (user, home, is_admin) 
-            VALUES
-            (1, 1, 'T'),
-            (1, 3, 'F'),
-            (1, 2, 'F'),
-            (2, 2, 'T'),
-            (2, 3, 'F'),
-            (3, 3, 'T')
-        ''')
-        connection.commit()
-    except:
-        print('User To Homes already added')
-
     try:
         db.execute('''
             INSERT INTO categories (category) 
@@ -112,17 +87,5 @@ def populate_tables(db, connection):
         connection.commit()
     except:
         print('Categories already added')
-
-    try:
-        db.execute('''
-            INSERT INTO home_items (home, quantity, item_name, category, alert_threshold) 
-            VALUES
-            (1, 5, 'Apple', 1, 2),
-            (1, 2, 'Peach', 1, 2),
-            (1, 1, 'Bread', 1, 0)
-        ''')
-        connection.commit()
-    except:
-        print('Items already added')
 
     connection.commit()

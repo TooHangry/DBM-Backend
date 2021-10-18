@@ -16,22 +16,20 @@ db = connection.cursor()
 def create_user(email, fname, lname, hashed_password, token):
     return user_queries.create_user(db, connection, email, fname, lname, hashed_password, token)
 
-
 def login_current_user(email, password):
     return user_queries.login_current_user(db, email, password)
-
 
 def login_from_token(token):
     return user_queries.login_from_token(db, token)
 
-
 def get_user_homes(id):
     return user_queries.get_user_homes(db, id)
 
+def get_user_home(user, home):
+    return user_queries.get_user_home(db, user, home)
 
 def get_user_by_id(id):
     return user_queries.get_user_by_id(db, id)
-
 
 def get_all_users():
     return user_queries.get_user_by_id(db)
@@ -45,10 +43,8 @@ def get_users_by_email(emails):
 def get_all_homes():
     return home_queries.get_all_homes(db)
 
-
 def get_home(id):
     return home_queries.get_home(db, id)
-
 
 def get_home_info(home_id):
     home = get_home(home_id)
@@ -76,9 +72,8 @@ def create_new_home(name, admin_id, invite_list):
             non_members.remove(user['email'])
             members.append(user['email'])
             user_to_home = home_queries.create_new_user_to_home(db, connection, user, home, admin)
-            print(home, user_to_home)
 
-        return
+        return get_user_home(user['id'], home['id'])
     
     return {}
 

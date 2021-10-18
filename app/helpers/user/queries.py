@@ -59,6 +59,19 @@ def get_user_homes(db, id):
                 '''.format(id))
     return serializers.serialize_homes(db.fetchall())
 
+def get_user_home(db, user, home):
+    db.execute('''
+                SELECT home, is_admin, nickname, users.id
+                FROM users
+                INNER JOIN (SELECT *
+                            FROM user_to_homes
+                            INNER JOIN homes
+                            ON user_to_homes.home = homes.id AND homes.id = {}) merged_homes
+                ON users.id = merged_homes.user
+                WHERE users.id = {};
+                '''.format(home, user))
+    homes = serializers.serialize_homes(db.fetchall())
+    return homes[0] if len(homes) > 0 else abort(404)
 
 def get_user_by_id(db, id):
     db.execute('''
