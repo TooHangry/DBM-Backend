@@ -77,3 +77,16 @@ def get_all_users(db):
                 ''')
     users = serializers.serialize_users(db.fetchall())
     return users
+
+def get_users_by_email(db, emails):
+    email_tuple = tuple(','.join(emails).split (','))
+    questionmarks = '?' * len(email_tuple)
+    query = '''
+                SELECT *
+                FROM users
+                WHERE email IN ({})
+                '''.format(','.join(questionmarks))
+
+    db.execute(query, email_tuple)
+    users = serializers.serialize_users(db.fetchall())
+    return users

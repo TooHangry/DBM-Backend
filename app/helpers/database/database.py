@@ -36,6 +36,8 @@ def get_user_by_id(id):
 def get_all_users():
     return user_queries.get_user_by_id(db)
 
+def get_users_by_email(emails):
+    return user_queries.get_users_by_email(db, emails)
 
 ################
 # HOME QUERIES #
@@ -56,6 +58,29 @@ def get_home_info(home_id):
     flattened_items = list(itertools.chain(*items))
     home['items'] = flattened_items if len(flattened_items) > 0 else []
     return home
+
+def create_new_home(name, admin_id, invite_list):
+    admin = get_user_by_id(admin_id)
+
+    if admin['email'] not in invite_list:
+        invite_list.append(admin['email'])
+
+    if admin:
+        users = get_users_by_email(invite_list)
+        home = home_queries.create_new_home(db, connection, name)
+
+        non_members = invite_list
+        members = []
+        for user in users:
+            # SEND INVITE EMAILS HERE
+            non_members.remove(user['email'])
+            members.append(user['email'])
+            user_to_home = home_queries.create_new_user_to_home(db, connection, user, home, admin)
+            print(home, user_to_home)
+
+        return
+    
+    return {}
 
 
 def get_category_id(category_name):

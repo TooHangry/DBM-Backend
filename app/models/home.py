@@ -18,10 +18,11 @@ class UserToHome:
 class Home:
     id: int
     nickname: str
+    GUID: str
 
     def __init__(self, home):
         self.id = home[0] 
-        self.nickname = home[1]  
+        self.nickname = home[1]
     
     def serialize(self):
         return {

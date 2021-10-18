@@ -35,7 +35,8 @@ def create_tables(db):
     db.execute('''
                 CREATE TABLE IF NOT EXISTS homes (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nickname VARCHAR(128) UNIQUE
+                    nickname VARCHAR(128),
+                    GUID VARCHAR(128) UNIQUE
                 )
                 ''')
 
@@ -65,17 +66,15 @@ def create_tables(db):
 
 
 def populate_tables(db, connection):
-    try:
-        db.execute('''
-            INSERT INTO homes (nickname) 
-            VALUES
-            ('Robert''s Residence'),
-            ('Brendon''s Barndemenium'),
-            ('Tyler''s Townhome')
-        ''')
-        connection.commit()
-    except:
-        print('Homes already added')
+    # db.execute('''
+    #     INSERT INTO homes (nickname) 
+    #     VALUES
+    #     ('Robert''s Residence'),
+    #     ('Brendon''s Barndemenium'),
+    #     ('Tyler''s Townhome')
+    # ''')
+    # connection.commit()
+    print('Homes already added')
 
     try:
         db.execute('''
