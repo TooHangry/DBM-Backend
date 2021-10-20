@@ -7,3 +7,9 @@ def get_default():
     return {
         'lists': []
     }
+
+# /lists/mine/id
+# /lists/home/id
+# /lists/add
+# /lists/remove/id
+# /lists/update/id

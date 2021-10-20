@@ -3,6 +3,7 @@ import json
 from secrets import token_urlsafe
 from app.helpers.database import database
 from app.helpers.user import helpers
+
 user_routes = Blueprint('user', __name__, url_prefix='')
 
 @user_routes.route('/login', methods=['POST'])
