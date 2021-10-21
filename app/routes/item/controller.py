@@ -24,8 +24,4 @@ def get_categories():
 
 @item_routes.route('/items/delete/<home>/<id>', methods=['DELETE'])
 def delete_item(home, id):
-    item_to_delete = json.dumps(database.get_item(id))
-
-    print(item_to_delete, home, id)
-
-    return item_to_delete
+    return json.dumps(database.remove_item(id))

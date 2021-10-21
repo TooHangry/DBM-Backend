@@ -91,6 +91,9 @@ def get_all_categories():
 def get_item(id):
     return item_queries.get_item(db, id)
 
+def remove_item(item_id):
+    return item_queries.delete_item(db, connection, item_id)
+
 def add_item(home, name, quantity, threshold, category_name):
     category_id = get_category_id(category_name)
     category_id = 1 if len(category_id) < 1 else int(category_id[0])
