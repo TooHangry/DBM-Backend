@@ -37,5 +37,5 @@ def get_home_items(db, home_id, category_id):
                 FROM home_items
                 JOIN categories ON categories.id = home_items.category
                 WHERE home_items.home = ? AND categories.category = ?
-                ''', (home_id, category_id))
+                ''', (home_id, category_id,))
     return serializers.serialize_home_items(db.fetchall())

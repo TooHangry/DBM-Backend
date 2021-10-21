@@ -34,7 +34,7 @@ def create_new_home(db, connection, name):
     guid = uuid.uuid1()
     db.execute('''
                 INSERT INTO homes (nickname, GUID)
-                VALUES (?, ?)''', (name, str(guid)))
+                VALUES (?, ?)''', (name, str(guid),))
     connection.commit()
 
     db.execute('''
@@ -48,7 +48,7 @@ def create_new_user_to_home(db, connection, user, home, admin):
     db.execute('''
                 INSERT INTO user_to_homes (user, home, is_admin)
                 VALUES (?, ?, ?)
-                ''', (user['id'], home['id'], 'T' if admin['id'] == user['id'] else 'F'))
+                ''', (user['id'], home['id'], 'T' if admin['id'] == user['id'] else 'F',))
     connection.commit()
 
     db.execute('''
