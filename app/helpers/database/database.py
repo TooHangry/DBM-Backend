@@ -87,11 +87,16 @@ def get_category_id(category_name):
 
 def get_all_categories():
     return item_queries.get_all_categories(db)
+
+def get_item(id):
+    return item_queries.get_item(db, id)
+
 def add_item(home, name, quantity, threshold, category_name):
     category_id = get_category_id(category_name)
     category_id = 1 if len(category_id) < 1 else int(category_id[0])
     item_queries.add_item(db, connection, home, name,
                           quantity, threshold, category_id)
+    return
 
 def get_all_items():
     return item_queries.get_all_items(db)

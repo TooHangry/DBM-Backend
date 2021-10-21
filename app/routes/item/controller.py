@@ -20,3 +20,12 @@ def add_item(home):
 @item_routes.route('/categories', methods=['GET'])
 def get_categories():
     return json.dumps(database.get_all_categories())
+
+
+@item_routes.route('/items/delete/<home>/<id>', methods=['DELETE'])
+def delete_item(home, id):
+    item_to_delete = json.dumps(database.get_item(id))
+
+    print(item_to_delete, home, id)
+
+    return item_to_delete

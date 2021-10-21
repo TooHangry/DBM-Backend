@@ -1,17 +1,20 @@
 class Item:
+    id: int
     home_id: int
     quantity: int
     item_name: str
     category_id: int
 
     def __init__(self, item):
-        self.home_id = item[0]
-        self.quantity = item[1]  
-        self.item_name = item[2]  
-        self.category_id = item[3]  
+        self.id = item[0]
+        self.home_id = item[1]
+        self.quantity = item[2]  
+        self.item_name = item[3]  
+        self.category_id = item[4]  
     
     def serialize(self):
         return {
+            'id': self.id,
             'homeID': self.home_id,
             'quantity': self.quantity,
             'itemName': self.item_name,
@@ -19,19 +22,23 @@ class Item:
         }
 
 class HomeItem:
+    id: int
     item_name: str
     quantity: int
     category: str
     alert_threshold: int
 
     def __init__(self, item):
-        self.item_name = item[0]
-        self.quantity = item[1]  
-        self.category = item[2]  
-        self.alert_threshold = item[3]
+        print(item)
+        self.id = item[0]
+        self.item_name = item[1]
+        self.quantity = item[2]  
+        self.category = item[3]  
+        self.alert_threshold = item[4]
 
     def serialize(self):
         return {
+            'id': self.id,
             'item': self.item_name,
             'quantity': self.quantity,
             'category': self.category,

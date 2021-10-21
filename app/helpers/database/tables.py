@@ -43,19 +43,19 @@ def create_tables(db):
     # Home Items table
     db.execute('''
                 CREATE TABLE IF NOT EXISTS home_items (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     home INTEGER NOT NULL,
                     quantity INTEGER,
                     item_name VARCHAR(64),
                     category INTEGER NOT NULL,
                     alert_threshold INTEGER,
 
-                    PRIMARY KEY (home, item_name),
                     FOREIGN KEY(home) REFERENCES homes(id)
                     FOREIGN KEY(category) REFERENCES categories(id)
                 )
                 ''')
 
-    # Home Items table
+    # Home categories table
     db.execute('''
                 CREATE TABLE IF NOT EXISTS categories (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,

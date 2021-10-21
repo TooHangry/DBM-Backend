@@ -1,5 +1,6 @@
 from app.helpers.home.serializers import serialize_categories
 from app.helpers.item import serializers
+from flask import abort
 
 def add_item(db, connection, home, name, quantity, threshold, category_id):
     db.execute('''
@@ -31,9 +32,18 @@ def get_all_items(db):
                 ''')
     return serializers.serialize_items(db.fetchall())
 
+def get_item(db, id):
+    db.execute('''
+                SELECT *
+                FROM home_items
+                WHERE id = ?
+                ''', (id, ))
+    items = serializers.serialize_items(db.fetchall())
+    return items[0] if len(items) > 0 else abort(404)
+
 def get_home_items(db, home_id, category_id):
     db.execute('''
-                SELECT home_items.item_name, home_items.quantity, categories.category, home_items.alert_threshold
+                SELECT home_items.id, home_items.item_name, home_items.quantity, categories.category, home_items.alert_threshold
                 FROM home_items
                 JOIN categories ON categories.id = home_items.category
                 WHERE home_items.home = ? AND categories.category = ?
