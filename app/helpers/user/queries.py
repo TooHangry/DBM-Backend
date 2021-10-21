@@ -69,7 +69,7 @@ def get_user_home(db, user, home):
                             ON user_to_homes.home = homes.id AND homes.id = ?) merged_homes
                 ON users.id = merged_homes.user
                 WHERE users.id = ?;
-                '''(home, user, ))
+                ''', (home, user, ))
     homes = serializers.serialize_homes(db.fetchall())
     return homes[0] if len(homes) > 0 else abort(404)
 
