@@ -15,7 +15,7 @@ def get_home(db, id):
             SELECT *
             FROM homes
             WHERE id = ?;
-            ''', (id))
+            ''', (id, ))
     homes = serializers.serialize_homes(db.fetchall())
     return homes[0] if len(homes) > 0 else abort(404)
 
@@ -27,7 +27,7 @@ def get_home_categories(db, id):
                                         From homes
                                         JOIN home_items ON home_items.home = homes.id
                                         WHERE homes.id = ?)
-                ''', (id))
+                ''', (id,))
     return serializers.serialize_categories(db.fetchall())
 
 def create_new_home(db, connection, name):
@@ -40,7 +40,7 @@ def create_new_home(db, connection, name):
     db.execute('''
                 SELECT *
                 FROM homes
-                WHERE nickname = ? AND GUID = ?''', (name, str(guid)))
+                WHERE nickname = ? AND GUID = ?''', (name, str(guid),))
     homes = serializers.serialize_homes(db.fetchall())
     return homes[0] if len(homes) > 0 else abort(404)
 
@@ -54,4 +54,4 @@ def create_new_user_to_home(db, connection, user, home, admin):
     db.execute('''
                 SELECT * 
                 FROM user_to_homes
-                WHERE user = ? AND home = ?''', (user['id'], home['id']))
+                WHERE user = ? AND home = ?''', (user['id'], home['id'],))
