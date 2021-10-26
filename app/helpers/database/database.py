@@ -61,6 +61,7 @@ def get_home_info(home_id):
     # NEED TO GET HOME USERS AND INVITES
     home['users'] = get_home_users(home_id)
     home['invites'] = invite_queries.get_home_invites(db, home_id)
+    home['admin'] = user_queries.get_home_admin(db, home_id)['email']
 
     return home
 

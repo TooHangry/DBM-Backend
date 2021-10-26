@@ -50,8 +50,3 @@ def create_new_user_to_home(db, connection, user, home, admin):
                 VALUES (?, ?, ?)
                 ''', (user['id'], home['id'], 'T' if admin['id'] == user['id'] else 'F',))
     connection.commit()
-
-    db.execute('''
-                SELECT * 
-                FROM user_to_homes
-                WHERE user = ? AND home = ?''', (user['id'], home['id'],))
