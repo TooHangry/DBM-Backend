@@ -33,7 +33,7 @@ def get_user_by_id(id):
     return user_queries.get_user_by_id(db, id)
 
 def get_all_users():
-    return user_queries.get_user_by_id(db)
+    return user_queries.get_all_users(db)
 
 def get_home_users(home_id):
     return user_queries.get_home_users(db, home_id)
