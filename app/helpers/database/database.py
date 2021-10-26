@@ -32,7 +32,7 @@ def get_user_by_id(id):
     return user_queries.get_user_by_id(db, id)
 
 def get_all_users():
-    return user_queries.get_user_by_id(db)
+    return user_queries.get_all_users(db)
 
 def get_users_by_email(emails):
     return user_queries.get_users_by_email(db, emails)
@@ -74,7 +74,7 @@ def create_new_home(name, admin_id, invite_list):
             user_to_home = home_queries.create_new_user_to_home(db, connection, user, home, admin)
 
         return get_user_home(user['id'], home['id'])
-    
+
     return {}
 
 
