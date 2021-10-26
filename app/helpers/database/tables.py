@@ -12,7 +12,8 @@ def create_tables(db):
                     UUID_token BLOB NOT NULL,
 
                     UNIQUE(email),
-                    UNIQUE(UUID_token)
+                    UNIQUE(UUID_token),
+                    CHECK(email LIKE '%@%.%')
                 )
                 ''')
 
@@ -62,6 +63,18 @@ def create_tables(db):
                     category VARCHAR(64) NOT NULL,
                     UNIQUE(category)
                 )
+                ''')
+    
+    # Invite table
+    db.execute('''
+                CREATE TABLE IF NOT EXISTS invite (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    email VARCHAR(128) NOT NULL,
+                    home INTEGER NOT NULL,
+
+                    FOREIGN KEY (home) REFERENCES homes(id),
+                    CHECK(email LIKE '%@%.%')
+                );
                 ''')
 
 

@@ -27,6 +27,14 @@ class User:
             'token': self.token,
             'homes': homes
         }
+
+    def serialize_as_member(self):
+        return {
+            'id': self.id,
+            'fname': self.fname,
+            'lname': self.lname,
+            'email': self.email,
+        }
     
     def set_homes(self, homes):
         self.homes = homes

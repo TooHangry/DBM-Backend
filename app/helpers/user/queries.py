@@ -82,7 +82,17 @@ def get_user_by_id(db, id):
     users = serializers.serialize_users(db.fetchall())
     return users[0] if len(users) > 0 else {}
 
+def get_home_users(db, home_id):
+    db.execute('''
+                SELECT *
+                FROM users
+                WHERE id IN (SELECT user
+                FROM user_to_homes 
+                WHERE home = ?);
+                ''', (home_id, ))
 
+    return serializers.serialize_home_members(db.fetchall())
+    
 def get_all_users(db):
     db.execute('''
                 SELECT * 

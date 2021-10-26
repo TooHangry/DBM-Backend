@@ -2,6 +2,7 @@ from app.helpers.database import tables
 from app.helpers.item import queries as item_queries
 from app.helpers.home import queries as home_queries
 from app.helpers.user import queries as user_queries
+from app.helpers.invite import queries as invite_queries
 import sqlite3
 import itertools
 # Running on a single thread
@@ -34,6 +35,9 @@ def get_user_by_id(id):
 def get_all_users():
     return user_queries.get_user_by_id(db)
 
+def get_home_users(home_id):
+    return user_queries.get_home_users(db, home_id)
+
 def get_users_by_email(emails):
     return user_queries.get_users_by_email(db, emails)
 
@@ -53,6 +57,11 @@ def get_home_info(home_id):
     items = [get_home_category_items(home_id, cat) for cat in categories]
     flattened_items = list(itertools.chain(*items))
     home['items'] = flattened_items if len(flattened_items) > 0 else []
+    
+    # NEED TO GET HOME USERS AND INVITES
+    home['users'] = get_home_users(home_id)
+    home['invites'] = invite_queries.get_home_invites(db, home_id)
+
     return home
 
 def create_new_home(name, admin_id, invite_list):
@@ -63,6 +72,7 @@ def create_new_home(name, admin_id, invite_list):
 
     if admin:
         users = get_users_by_email(invite_list)
+        user_id = users[0]['id']
         home = home_queries.create_new_home(db, connection, name)
 
         non_members = invite_list
@@ -72,11 +82,15 @@ def create_new_home(name, admin_id, invite_list):
             non_members.remove(user['email'])
             members.append(user['email'])
             user_to_home = home_queries.create_new_user_to_home(db, connection, user, home, admin)
-
-        return get_user_home(user['id'], home['id'])
+        
+                # for non-members, create an invite
+        for email in non_members:
+            print('invite for ', user)
+            invite_queries.create_invite(db, connection, email, home['id'])
+            
+        return get_user_home(user_id, home['id'])
     
     return {}
-
 
 def get_category_id(category_name):
     return item_queries.get_category(db, category_name)
@@ -110,7 +124,6 @@ def get_home_category_items(home_id, category_id):
 ###########################
 # DATABASE INITIALIZATION #
 ###########################
-
 
 def initialize_database():
     tables.create_tables(db)
