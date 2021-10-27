@@ -122,6 +122,19 @@ def get_all_items():
 def get_home_category_items(home_id, category_id):
     return item_queries.get_home_items(db, home_id, category_id)
 
+################
+# LIST QUERIES #
+################
+def get_user_lists(id):
+    return {
+        'id' : id
+    }
+
+def get_home_lists(id):
+    return {
+        'id' : id
+    }
+
 ###########################
 # DATABASE INITIALIZATION #
 ###########################
