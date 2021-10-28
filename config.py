@@ -22,3 +22,7 @@ HASH_KEY = b'\x8a\xcdB\xe3?+\x92x3,\xbb\x9e\xf2\xed\xc1a\xb0\x9f\xb1\xfax\xfa\xc
 
 # Folders for user uploads
 UPLOAD_FOLDER = '{}/uploads/'.format(BASE_DIR)
+
+# Email config values
+EMAIL_ADDRESS  = 'homemanagementdbm2021@gmail.com'
+EMAIL_PASSWORD = 'TableFlippers2021!'

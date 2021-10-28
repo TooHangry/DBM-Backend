@@ -3,6 +3,7 @@ from app.helpers.item import queries as item_queries
 from app.helpers.home import queries as home_queries
 from app.helpers.user import queries as user_queries
 from app.helpers.invite import queries as invite_queries
+from app.helpers.email import email as email_helper
 import sqlite3
 import itertools
 # Running on a single thread
@@ -100,6 +101,11 @@ def create_new_home(name, admin_id, invite_list):
             members.append(user['email'])
             home_queries.create_new_user_to_home(
                 db, connection, user, home, admin)
+            email_helper.send_collab_notice(user, home, admin)
+            
+
+        # Sends the invite email
+        email_helper.send_invites(non_members, home, admin)
 
         # for non-members, create an invite
         for email in non_members:
