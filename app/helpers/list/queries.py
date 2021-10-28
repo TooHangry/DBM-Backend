@@ -3,8 +3,28 @@ from app.helpers.list import serializers
 from flask import abort
 import uuid
 
-#TODO: add in queries
+def get_all_lists(db):
+    db.execute('''
+                SELECT *
+                FROM shopping_list
+                ''')
+    return serializers.serialize_lists(db.fetchall())
 
-# vscode://vscode.github-authentication/did-authenticate?windowid=1&code=dd6d9a9e09eb0458d63a&state=9909ba56-30dc-4c1f-af7d-dc0b7de13d9b 
+def get_user_lists(db, user_id):
+    db.execute('''
+                SELECT *
+                FROM shopping_list
+                WHERE tasked_to = ?
+                ''', (user_id, ))
+    shopping_lists = serializers.serialize_lists(db.fetchall())
+    return shopping_lists[0] if len(shopping_lists) > 0 else abort(404)
 
-#Need to reclone this and copy over my changes to a new branch.
+def get_home_lists(db, home_id):
+    db.execute('''
+                SELECT *
+                FROM shopping_list
+                WHERE home_tasked = ?
+                ''', (home_id, ))
+    shopping_lists = serializers.serialize_lists(db.fetchall())
+    return shopping_lists[0] if len(shopping_lists) > 0 else abort(404)
+

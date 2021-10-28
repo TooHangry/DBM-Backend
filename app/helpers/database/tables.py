@@ -76,7 +76,35 @@ def create_tables(db):
                     CHECK(email LIKE '%@%.%')
                 );
                 ''')
+    
+    # Shopping List Table
+    db.execute('''
+               CREATE TABLE IF NOT EXISTS shopping_list
+                    id INTERGER PRIMARY KEY AUTOINCREMENT,
+                    tasked_to INTEGER NOT NULL,
+                    home_tasked INTEGER NOT NULL,
+                    tasked_on DATETIME DEFAULT(CURRENT_TIMESTAMP),
 
+                    FOREIGN KEY (tasked_to) REFERENCES user(id),
+                    FOREIGN KEY (home_tasked) REFERENCES home(id)
+                );
+                ''')
+
+
+    # Shopping List Items Table
+    db.execute('''
+               CREATE TABLE IF NOT EXISTS list_items
+                    list_id INTERGER NOT NULL,
+                    item_id INTEGER NOT NULL,
+                    quantity INTEGER NOT NULL,
+                    is_complete CHAR(1) NOT NULL,
+
+                    PRIMARY KEY (list_id, item_id)
+                    FOREIGN KEY (list_id) REFERENCES shopping_list(id),
+                    FOREIGN KEY (item_id) REFERENCES home_items(id)
+                    CHECK (quantity > 0)
+                );
+                ''')
 
 def populate_tables(db, connection):
     try:

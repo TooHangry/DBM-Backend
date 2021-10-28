@@ -3,6 +3,7 @@ from app.helpers.item import queries as item_queries
 from app.helpers.home import queries as home_queries
 from app.helpers.user import queries as user_queries
 from app.helpers.invite import queries as invite_queries
+from app.helpers.list import queries as list_queries
 import sqlite3
 import itertools
 # Running on a single thread
@@ -122,18 +123,29 @@ def get_all_items():
 def get_home_category_items(home_id, category_id):
     return item_queries.get_home_items(db, home_id, category_id)
 
-################
-# LIST QUERIES #
-################
-def get_user_lists(id):
-    return {
-        'id' : id
-    }
+#########################
+# SHOPPING LIST QUERIES #
+#########################
+def get_all_lists():
+    return list_queries.get_all_lists(db)
 
-def get_home_lists(id):
-    return {
-        'id' : id
-    }
+def get_user_lists(user_id):  #all lists associated with a user
+    return list_queries.get_user_lists(db, user_id)
+
+def get_home_lists(home_id):  #all lists associated with a home
+    return list_queries.get_home_lists(db, home_id)
+
+def create_list():
+    return list_queries.create_list(db)
+
+def remove_list():
+    return list_queries
+
+def add_item_to_list():
+    return list_queries
+
+def assign_list():
+    return list_queries
 
 ###########################
 # DATABASE INITIALIZATION #

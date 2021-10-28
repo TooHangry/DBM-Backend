@@ -2,7 +2,7 @@ class ListItems:
     list_id: int
     item_id: int
     quantity: int
-    is_complete: str
+    is_complete: bool
 
     def __init__(self, shopping_list):
         self.list_id     = shopping_list[0]
@@ -18,7 +18,7 @@ class ListItems:
             'isComplete': self.is_complete  #NOTE: I removed an ending comma and make the keys cammel case
         }
 
-class List:
+class ShoppingList:
     id: int
     tasked_to: int
     home_tasked: int
@@ -35,5 +35,5 @@ class List:
             'id': self.id,
             'taskedTo': self.tasked_to,
             'homeTasked': self.home_tasked,
-            'taskedOn': self.tasked_on     #NOTE: same here
+            'taskedOn': str(self.tasked_on)     #NOTE: same here
         }
