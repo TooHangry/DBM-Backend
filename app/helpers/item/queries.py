@@ -39,12 +39,10 @@ def get_item(db, id):
                 WHERE id = ?
                 ''', (id, ))
     items = serializers.serialize_items(db.fetchall())
-    print('items', items, id)
     return items[0] if len(items) > 0 else abort(404)
 
 def delete_item(db, connection, item_id):
     item_to_return = get_item(db, item_id)
-    print(item_to_return)
     if item_to_return:
         db.execute('''
                     DELETE FROM home_items

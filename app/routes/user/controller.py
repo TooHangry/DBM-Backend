@@ -49,3 +49,17 @@ def get_current_user(id):
 @user_routes.route('/user/<id>/homes', methods=['GET'])
 def get_current_user_homes(id):
     return json.dumps(database.get_user_homes(id))
+
+@user_routes.route('/removeinvite/<id>', methods=['DELETE'])
+def remove_invite(id):
+    database.remove_invite(id)
+    return {
+        'success': 200
+    }
+
+@user_routes.route('/removeuser/<home>/<user>', methods=['DELETE'])
+def remove_user(home, user):
+    database.remove_user(user, home)
+    return {
+        'success': 200
+    }

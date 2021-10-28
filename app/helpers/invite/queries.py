@@ -15,3 +15,12 @@ def get_home_invites(db, home_id):
                 WHERE home = ?
                 ''', (home_id, ))
     return serializers.serialize_invites(db.fetchall())
+
+
+def remove_invite(db, connection, id):
+    db.execute('''
+                DELETE FROM invite
+                WHERE id = ?;
+                ''', (id, ))
+
+    connection.commit()

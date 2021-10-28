@@ -17,38 +17,53 @@ db = connection.cursor()
 def create_user(email, fname, lname, hashed_password, token):
     return user_queries.create_user(db, connection, email, fname, lname, hashed_password, token)
 
+
 def login_current_user(email, password):
     return user_queries.login_current_user(db, email, password)
+
 
 def login_from_token(token):
     return user_queries.login_from_token(db, token)
 
+
 def get_user_homes(id):
     return user_queries.get_user_homes(db, id)
+
 
 def get_user_home(user, home):
     return user_queries.get_user_home(db, user, home)
 
+
 def get_user_by_id(id):
     return user_queries.get_user_by_id(db, id)
+
 
 def get_all_users():
     return user_queries.get_all_users(db)
 
+
 def get_home_users(home_id):
     return user_queries.get_home_users(db, home_id)
+
 
 def get_users_by_email(emails):
     return user_queries.get_users_by_email(db, emails)
 
+def remove_user(user_id, home_id):
+    return user_queries.remove_user(db, connection, user_id, home_id)
+
 ################
 # HOME QUERIES #
 ################
+
+
 def get_all_homes():
     return home_queries.get_all_homes(db)
 
+
 def get_home(id):
     return home_queries.get_home(db, id)
+
 
 def get_home_info(home_id):
     home = get_home(home_id)
@@ -57,13 +72,14 @@ def get_home_info(home_id):
     items = [get_home_category_items(home_id, cat) for cat in categories]
     flattened_items = list(itertools.chain(*items))
     home['items'] = flattened_items if len(flattened_items) > 0 else []
-    
+
     # NEED TO GET HOME USERS AND INVITES
     home['users'] = get_home_users(home_id)
-    home['invites'] = invite_queries.get_home_invites(db, home_id)
+    home['invites'] = get_home_invites(home_id)
     home['admin'] = user_queries.get_home_admin(db, home_id)['email']
 
     return home
+
 
 def create_new_home(name, admin_id, invite_list):
     admin = get_user_by_id(admin_id)
@@ -82,16 +98,17 @@ def create_new_home(name, admin_id, invite_list):
             # SEND INVITE EMAILS HERE
             non_members.remove(user['email'])
             members.append(user['email'])
-            user_to_home = home_queries.create_new_user_to_home(db, connection, user, home, admin)
-        
-                # for non-members, create an invite
+            home_queries.create_new_user_to_home(
+                db, connection, user, home, admin)
+
+        # for non-members, create an invite
         for email in non_members:
-            print('invite for ', user)
-            invite_queries.create_invite(db, connection, email, home['id'])
-            
+            create_invite(email, home['id'])
+
         return get_user_home(user_id, home['id'])
-    
+
     return {}
+
 
 def get_category_id(category_name):
     return item_queries.get_category(db, category_name)
@@ -100,14 +117,18 @@ def get_category_id(category_name):
 # ITEM QUERIES #
 ################
 
+
 def get_all_categories():
     return item_queries.get_all_categories(db)
+
 
 def get_item(id):
     return item_queries.get_item(db, id)
 
+
 def remove_item(item_id):
     return item_queries.delete_item(db, connection, item_id)
+
 
 def add_item(home, name, quantity, threshold, category_name):
     category_id = get_category_id(category_name)
@@ -116,15 +137,34 @@ def add_item(home, name, quantity, threshold, category_name):
                           quantity, threshold, category_id)
     return
 
+
 def get_all_items():
     return item_queries.get_all_items(db)
+
 
 def get_home_category_items(home_id, category_id):
     return item_queries.get_home_items(db, home_id, category_id)
 
+
+##################
+# INVITE QUERIES #
+##################
+
+def get_home_invites(home_id):
+    return invite_queries.get_home_invites(db, home_id)
+
+
+def create_invite(email, home_id):
+    return invite_queries.create_invite(db, connection, email, home_id)
+
+
+def remove_invite(id):
+    return invite_queries.remove_invite(db, connection, id)
+
 ###########################
 # DATABASE INITIALIZATION #
 ###########################
+
 
 def initialize_database():
     tables.create_tables(db)

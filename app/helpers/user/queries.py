@@ -91,7 +91,6 @@ def get_home_admin(db, home_id):
                              WHERE home = ? AND is_admin = 'T')
                 ''', (home_id, ))
     users = serializers.serialize_users(db.fetchall())
-    print(users)
     return users[0] if len(users) > 0 else {}
 
 def get_home_users(db, home_id):
@@ -125,3 +124,10 @@ def get_users_by_email(db, emails):
     db.execute(query, email_tuple)
     users = serializers.serialize_users(db.fetchall())
     return users
+
+def remove_user(db, connection, user_id, home_id):
+    db.execute('''
+                DELETE FROM user_to_homes
+                WHERE user = ? AND home = ? AND is_admin = 'F';
+                ''', (user_id, home_id, ))
+    connection.commit()

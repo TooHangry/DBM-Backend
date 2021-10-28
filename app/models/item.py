@@ -29,7 +29,6 @@ class HomeItem:
     alert_threshold: int
 
     def __init__(self, item):
-        print(item)
         self.id = item[0]
         self.item_name = item[1]
         self.quantity = item[2]  
