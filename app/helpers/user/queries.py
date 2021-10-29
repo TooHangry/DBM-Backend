@@ -82,6 +82,16 @@ def get_user_by_id(db, id):
     users = serializers.serialize_users(db.fetchall())
     return users[0] if len(users) > 0 else {}
 
+def get_user_by_email(db, email):
+    db.execute('''
+                SELECT * 
+                FROM users
+                WHERE email = ?
+                ''', (email, ))
+    users = serializers.serialize_users(db.fetchall())
+    print(users)
+    return users[0] if len(users) > 0 else {}
+
 def get_home_admin(db, home_id):
     db.execute('''
                 SELECT * 

@@ -16,7 +16,22 @@ db = connection.cursor()
 ################
 
 def create_user(email, fname, lname, hashed_password, token):
-    return user_queries.create_user(db, connection, email, fname, lname, hashed_password, token)
+
+    try:
+        user_queries.create_user(
+            db, connection, email, fname, lname, hashed_password, token)
+        user = user_queries.get_user_by_email(db, email)
+
+        if user:
+            invites = get_invites_for_user(email)
+            for invite in invites:
+                home = home_queries.get_home(db, invite['home'])
+                admin = user_queries.get_home_admin(db, invite['home'])
+                remove_invite(invite['id'])
+                home_queries.create_new_user_to_home(
+                    db, connection, user, home, admin)
+    except:
+        print("User could not be created")
 
 
 def login_current_user(email, password):
@@ -49,6 +64,7 @@ def get_home_users(home_id):
 
 def get_users_by_email(emails):
     return user_queries.get_users_by_email(db, emails)
+
 
 def remove_user(user_id, home_id):
     return user_queries.remove_user(db, connection, user_id, home_id)
@@ -102,7 +118,6 @@ def create_new_home(name, admin_id, invite_list):
             home_queries.create_new_user_to_home(
                 db, connection, user, home, admin)
             email_helper.send_collab_notice(user, home, admin)
-            
 
         # Sends the invite email
         email_helper.send_invites(non_members, home, admin)
@@ -166,6 +181,10 @@ def create_invite(email, home_id):
 
 def remove_invite(id):
     return invite_queries.remove_invite(db, connection, id)
+
+
+def get_invites_for_user(email):
+    return invite_queries.get_invites_for_user(db, email)
 
 ###########################
 # DATABASE INITIALIZATION #
