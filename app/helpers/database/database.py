@@ -16,7 +16,6 @@ db = connection.cursor()
 ################
 
 def create_user(email, fname, lname, hashed_password, token):
-
     try:
         user_queries.create_user(
             db, connection, email, fname, lname, hashed_password, token)
@@ -117,7 +116,8 @@ def create_new_home(name, admin_id, invite_list):
             members.append(user['email'])
             home_queries.create_new_user_to_home(
                 db, connection, user, home, admin)
-            email_helper.send_collab_notice(user, home, admin)
+            if user['id'] != admin['id']:
+                email_helper.send_collab_notice(user, home, admin)
 
         # Sends the invite email
         email_helper.send_invites(non_members, home, admin)

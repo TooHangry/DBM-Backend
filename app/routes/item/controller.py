@@ -25,3 +25,13 @@ def get_categories():
 @item_routes.route('/items/delete/<home>/<id>', methods=['DELETE'])
 def delete_item(home, id):
     return json.dumps(database.remove_item(id))
+
+@item_routes.route('/items/update/<itemID>/<userID>', methods=['PUT'])
+def update_item(itemID, userID):
+    item_id = itemID
+    name = request.form['name']
+    quantity = request.form['quantity']
+    threshold = request.form['threshold']
+    category_name = request.form['category']
+
+    print (itemID, userID, name, quantity, threshold, category_name)
