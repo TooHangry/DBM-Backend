@@ -79,8 +79,8 @@ def create_tables(db):
     
     # Shopping List Table
     db.execute('''
-               CREATE TABLE IF NOT EXISTS shopping_list
-                    id INTERGER PRIMARY KEY AUTOINCREMENT,
+               CREATE TABLE IF NOT EXISTS shopping_list (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     tasked_to INTEGER NOT NULL,
                     home_tasked INTEGER NOT NULL,
                     tasked_on DATETIME DEFAULT(CURRENT_TIMESTAMP),
@@ -93,8 +93,8 @@ def create_tables(db):
 
     # Shopping List Items Table
     db.execute('''
-               CREATE TABLE IF NOT EXISTS list_items
-                    list_id INTERGER NOT NULL,
+               CREATE TABLE IF NOT EXISTS list_items (
+                    list_id INTEGER NOT NULL,
                     item_id INTEGER NOT NULL,
                     quantity INTEGER NOT NULL,
                     is_complete CHAR(1) NOT NULL,

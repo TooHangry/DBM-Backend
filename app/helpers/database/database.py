@@ -180,7 +180,7 @@ def get_home_lists(home_id):  #all lists associated with a home
     return list_queries.get_home_lists(db, home_id)
 
 def create_list(tasked_to, home_tasked):
-    list_queries.create_list(db, connection, tasked_to, home_tasked)
+    list_queries.create_list(db, connection, tasked_to, home_tasked)   #TODO: do these need to return None?
 
 def remove_list(list_id):
     list_queries.remove_list(db, connection, list_id)
