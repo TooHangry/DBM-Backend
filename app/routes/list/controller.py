@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 import json
 from app.helpers.database import database
 
@@ -24,9 +24,20 @@ def get_home_lists(id):
 
 # /lists/add
 #   Create a new list (pass in formdata with name, homeID, adminID, etc.)
+@list_routes.route('/lists/add', methods=['POST'])
+def create_list():
+    data = request.form
+
+    tasked_to = data['taskedTo']
+    home_tasked = data['homeTasked']
+
+    return json.dumps(database.create_list(tasked_to, home_tasked))
 
 # /lists/remove/id
 #   Delete home with id from query param
+@list_routes.route('/lists/remove/<id>', methods=['GET'])
+def remove_list(id):
+    return json.dumps(database.remove_list(id))
 
 # /lists/update/id
 #   Update the list at 'id' with passed-in form data

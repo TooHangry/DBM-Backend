@@ -135,17 +135,17 @@ def get_user_lists(user_id):  #all lists associated with a user
 def get_home_lists(home_id):  #all lists associated with a home
     return list_queries.get_home_lists(db, home_id)
 
-def create_list():
-    return list_queries.create_list(db)
+def create_list(tasked_to, home_tasked):
+    list_queries.create_list(db, connection, tasked_to, home_tasked)
 
-def remove_list():
-    return list_queries
+def remove_list(list_id):
+    list_queries.remove_list(db, connection, list_id)
 
-def add_item_to_list():
-    return list_queries
+def add_item_to_list(list_id, item_id, quantity):
+    list_queries.add_item_to_list(db, connection, list_id, item_id, quantity)
 
-def assign_list():
-    return list_queries
+def assign_list(list_id, user_id):
+    list_queries.assign_list(db, connection, list_id, user_id)
 
 ###########################
 # DATABASE INITIALIZATION #

@@ -15,7 +15,7 @@ class ListItems:
             'listID': self.list_id,
             'itemID': self.item_id,
             'quantity': self.quantity,
-            'isComplete': self.is_complete  #NOTE: I removed an ending comma and make the keys cammel case
+            'isComplete': self.is_complete
         }
 
 class ShoppingList:
@@ -35,5 +35,5 @@ class ShoppingList:
             'id': self.id,
             'taskedTo': self.tasked_to,
             'homeTasked': self.home_tasked,
-            'taskedOn': str(self.tasked_on)     #NOTE: same here
+            'taskedOn': str(self.tasked_on)
         }
