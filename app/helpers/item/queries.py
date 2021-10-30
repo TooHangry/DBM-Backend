@@ -10,6 +10,14 @@ def add_item(db, connection, home, name, quantity, threshold, category_id):
                 '''.format(home, quantity, name.replace("'", "''"), category_id, threshold))
     connection.commit()
 
+def update_item(db, connection, item_id, name, quantity, threshold, category_id, home_id):
+    db.execute('''
+                UPDATE home_items
+                SET home = ?, quantity = ?, item_name = ?, category = ?, alert_threshold = ?
+                WHERE id = ?
+                ''', (home_id, quantity, name, category_id, threshold, item_id))
+    connection.commit()
+
 def get_category(db, category):
     db.execute('''
                 SELECT *

@@ -158,6 +158,10 @@ def add_item(home, name, quantity, threshold, category_name):
                           quantity, threshold, category_id)
     return
 
+def update_item(item_id, name, quantity, threshold, category_name, home_id):
+    category_id = get_category_id(category_name)
+    category_id = 1 if len(category_id) < 1 else int(category_id[0])
+    item_queries.update_item(db, connection, item_id, name, quantity, threshold, category_id, home_id)
 
 def get_all_items():
     return item_queries.get_all_items(db)
