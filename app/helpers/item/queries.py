@@ -2,6 +2,7 @@ from app.helpers.home.serializers import serialize_categories
 from app.helpers.item import serializers
 from flask import abort
 
+
 def add_item(db, connection, home, name, quantity, threshold, category_id):
     db.execute('''
                 INSERT INTO home_items (home, quantity, item_name, category, alert_threshold)
@@ -9,6 +10,7 @@ def add_item(db, connection, home, name, quantity, threshold, category_id):
                 ({}, {}, '{}', {}, {})
                 '''.format(home, quantity, name.replace("'", "''"), category_id, threshold))
     connection.commit()
+
 
 def update_item(db, connection, item_id, name, quantity, threshold, category_id, home_id):
     db.execute('''
@@ -18,6 +20,7 @@ def update_item(db, connection, item_id, name, quantity, threshold, category_id,
                 ''', (home_id, quantity, name, category_id, threshold, item_id))
     connection.commit()
 
+
 def get_category(db, category):
     db.execute('''
                 SELECT *
@@ -26,6 +29,7 @@ def get_category(db, category):
                 '''.format(category))
     return serialize_categories(db.fetchall())
 
+
 def get_all_categories(db):
     db.execute('''
                 SELECT category
@@ -33,12 +37,14 @@ def get_all_categories(db):
                 ''')
     return serialize_categories(db.fetchall())
 
+
 def get_all_items(db):
     db.execute('''
                 SELECT *
                 FROM home_items
                 ''')
     return serializers.serialize_items(db.fetchall())
+
 
 def get_item(db, id):
     db.execute('''
@@ -48,6 +54,7 @@ def get_item(db, id):
                 ''', (id, ))
     items = serializers.serialize_items(db.fetchall())
     return items[0] if len(items) > 0 else abort(404)
+
 
 def delete_item(db, connection, item_id):
     item_to_return = get_item(db, item_id)
