@@ -68,6 +68,27 @@ def get_users_by_email(emails):
 def remove_user(user_id, home_id):
     return user_queries.remove_user(db, connection, user_id, home_id)
 
+def add_user(email, home_id):
+    user = user_queries.get_user_by_email(db, email)
+    admin = user_queries.get_home_admin(db, home_id)
+    home = home_queries.get_home(db, home_id)
+
+    if user:
+        try:
+            home_queries.create_new_user_to_home(
+                db, connection, user, home, admin)
+            return 200
+        except:
+            return 400
+    else: 
+        admin = user_queries.get_home_admin(db, home_id)
+        email_helper.send_invites([email], home, admin)
+        # for non-members, create an invite
+        create_invite(email, home_id)
+    return 400
+
+def get_user_by_email(email):
+    return user_queries.get_user_by_email(db, email)
 ################
 # HOME QUERIES #
 ################

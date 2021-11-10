@@ -89,7 +89,6 @@ def get_user_by_email(db, email):
                 WHERE email = ?
                 ''', (email, ))
     users = serializers.serialize_users(db.fetchall())
-    print(users)
     return users[0] if len(users) > 0 else {}
 
 def get_home_admin(db, home_id):
