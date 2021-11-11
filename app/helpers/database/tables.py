@@ -64,16 +64,16 @@ def create_tables(db):
                     UNIQUE(category)
                 )
                 ''')
-    
+
     # Invite table
     db.execute('''
                 CREATE TABLE IF NOT EXISTS invite (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     email VARCHAR(128) NOT NULL,
                     home INTEGER NOT NULL,
 
                     FOREIGN KEY (home) REFERENCES homes(id),
                     CHECK(email LIKE '%@%.%')
+                    PRIMARY KEY (email, home)
                 );
                 ''')
 

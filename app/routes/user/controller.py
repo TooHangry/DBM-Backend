@@ -6,6 +6,7 @@ from app.helpers.user import helpers
 
 user_routes = Blueprint('user', __name__, url_prefix='')
 
+
 @user_routes.route('/login', methods=['POST'])
 def login():
     email = request.form['email']
@@ -16,12 +17,14 @@ def login():
         return json.dumps(database.login_current_user(email, hashed_password))
     abort(404)
 
+
 @user_routes.route('/login/token', methods=['POST'])
 def login_token():
     token = request.form['token']
     if token:
         return json.dumps(database.login_from_token(token))
     abort(404)
+
 
 @user_routes.route('/signup', methods=['POST'])
 def signup():
@@ -38,24 +41,29 @@ def signup():
         return json.dumps(database.login_current_user(email, hashed_password))
     abort(404)
 
+
 @user_routes.route('/all', methods=['GET'])
 def get_users():
     return json.dumps(database.get_all_users())
+
 
 @user_routes.route('/user/<id>', methods=['GET'])
 def get_current_user(id):
     return json.dumps(database.get_user_by_id(id))
 
+
 @user_routes.route('/user/<id>/homes', methods=['GET'])
 def get_current_user_homes(id):
     return json.dumps(database.get_user_homes(id))
 
-@user_routes.route('/removeinvite/<id>', methods=['DELETE'])
-def remove_invite(id):
-    database.remove_invite(id)
+
+@user_routes.route('/removeinvite/<home>/<user>', methods=['DELETE'])
+def remove_invite(home, user):
+    database.remove_invite(home, user)
     return {
         'success': 200
     }
+
 
 @user_routes.route('/removeuser/<home>/<user>', methods=['DELETE'])
 def remove_user(home, user):

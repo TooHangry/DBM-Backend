@@ -26,7 +26,7 @@ def create_user(email, fname, lname, hashed_password, token):
             for invite in invites:
                 home = home_queries.get_home(db, invite['home'])
                 admin = user_queries.get_home_admin(db, invite['home'])
-                remove_invite(invite['id'])
+                remove_invite(invite['home'], invite['email'])
                 home_queries.create_new_user_to_home(
                     db, connection, user, home, admin)
     except:
@@ -68,6 +68,7 @@ def get_users_by_email(emails):
 def remove_user(user_id, home_id):
     return user_queries.remove_user(db, connection, user_id, home_id)
 
+
 def add_user(email, home_id):
     user = user_queries.get_user_by_email(db, email)
     admin = user_queries.get_home_admin(db, home_id)
@@ -80,15 +81,23 @@ def add_user(email, home_id):
             return 200
         except:
             return 400
-    else: 
+    else:
         admin = user_queries.get_home_admin(db, home_id)
         email_helper.send_invites([email], home, admin)
         # for non-members, create an invite
-        create_invite(email, home_id)
-    return 400
+        try:
+            create_invite(email, home_id)
+            return 201
+        except:
+            return 400
+
 
 def get_user_by_email(email):
     return user_queries.get_user_by_email(db, email)
+
+def get_member_by_email(email):
+    return user_queries.get_member_by_email(db, email)
+
 ################
 # HOME QUERIES #
 ################
@@ -179,10 +188,13 @@ def add_item(home, name, quantity, threshold, category_name):
                           quantity, threshold, category_id)
     return
 
+
 def update_item(item_id, name, quantity, threshold, category_name, home_id):
     category_id = get_category_id(category_name)
     category_id = 1 if len(category_id) < 1 else int(category_id[0])
-    item_queries.update_item(db, connection, item_id, name, quantity, threshold, category_id, home_id)
+    item_queries.update_item(db, connection, item_id,
+                             name, quantity, threshold, category_id, home_id)
+
 
 def get_all_items():
     return item_queries.get_all_items(db)
@@ -204,13 +216,16 @@ def create_invite(email, home_id):
     return invite_queries.create_invite(db, connection, email, home_id)
 
 
-def remove_invite(id):
-    return invite_queries.remove_invite(db, connection, id)
+def remove_invite(home, user):
+    return invite_queries.remove_invite(db, connection, home, user)
 
 
 def get_invites_for_user(email):
     return invite_queries.get_invites_for_user(db, email)
 
+
+def get_invite(email, home_id):
+    return invite_queries.get_invite(db, email, home_id)
 ###########################
 # DATABASE INITIALIZATION #
 ###########################

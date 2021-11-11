@@ -1,4 +1,5 @@
 from app.helpers.invite import serializers
+from flask import abort
 
 def create_invite(db, connection, email, home_id):
     db.execute('''
@@ -24,10 +25,19 @@ def get_invites_for_user(db, email):
                 ''', (email, ))
     return serializers.serialize_invites(db.fetchall())
 
-def remove_invite(db, connection, id):
+def remove_invite(db, connection, home, user):
     db.execute('''
                 DELETE FROM invite
-                WHERE id = ?;
-                ''', (id, ))
+                WHERE email = ? AND home = ?;
+                ''', (user, home, ))
 
     connection.commit()
+
+def get_invite(db, email, home_id):
+    db.execute('''
+                SELECT * 
+                FROM invite
+                WHERE email = ? AND home = ?
+                ''', (email, home_id))
+    invites = serializers.serialize_invites(db.fetchall())
+    return invites[0] if len(invites) > 0 else abort(404)
