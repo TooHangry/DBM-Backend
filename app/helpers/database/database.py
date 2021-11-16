@@ -263,14 +263,18 @@ def update_list(id, items):
 
         new_item_ids = list(map(lambda item: str(item['id']), items))
         list_item_ids = list(map(lambda item: str(item['id']), items_in_list))
-        print(new_item_ids, list_item_ids)
        
         items_to_remove = []
         for item in list_item_ids:
             if item not in new_item_ids:
                 items_to_remove.append(item)
-        item_queries.add_item_to_list(db, connection, id, new_item_ids)
+
         item_queries.remove_item_from_list(db, connection, id, items_to_remove)
+
+        for item_id in new_item_ids:
+            item_needed_count = [item for item in items if int(item['id']) == int(item_id)]
+            if len(item_needed_count) > 0:
+                item_queries.add_item_to_list(db, connection, id,item_id, item_needed_count[0]['needed'])
     return
 
 ###########################

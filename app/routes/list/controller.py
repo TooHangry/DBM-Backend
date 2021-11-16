@@ -16,7 +16,6 @@ def get_lists_from_home(id):
 @list_routes.route('/lists/create', methods=['POST'])
 def create_list():
     data = data = request.form
-    print(data)
     format = "%m/%d/%Y" 
     title = data['title']
     tasked_user = data['taskedUserID']
@@ -31,7 +30,7 @@ def create_list():
 def update_list(id):
     data = request.form
     items = json.loads(data['items'])
-    
+
     database.update_list(id, items)
     return json.dumps(database.get_list_by_id(id))
 # /lists/mine/id

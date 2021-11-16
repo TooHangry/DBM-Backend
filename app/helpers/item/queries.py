@@ -53,17 +53,12 @@ def get_items_in_list(db, list):
                 ''', (list, ))
     return serializers.serialize_items(db.fetchall())
 
-def add_item_to_list(db, connection, list, items):
-    item_tuple =  tuple(','.join(items).split(','))
-    questionmarks = '?' * len(item_tuple)
-    item_tuple = (list, ) + item_tuple
-    query = '''
+def add_item_to_list(db, connection, list_id, item_id, needed_count):
+    db.execute('''
                 UPDATE home_items
-                SET list_id = ?, needed = quantity
-                WHERE id IN ({})
-                '''.format(','.join(questionmarks))
-
-    db.execute(query, item_tuple)
+                SET list_id = ?, needed = ?
+                WHERE id = ?
+                ''', (list_id, needed_count, item_id, ))
     connection.commit()
 
 def remove_item_from_list(db, connection, id, items_to_remove):
