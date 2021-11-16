@@ -45,6 +45,38 @@ def get_all_items(db):
                 ''')
     return serializers.serialize_items(db.fetchall())
 
+def get_items_in_list(db, list):
+    db.execute('''
+                SELECT *
+                FROM home_items
+                WHERE list_id = ?
+                ''', (list, ))
+    return serializers.serialize_items(db.fetchall())
+
+def add_item_to_list(db, connection, list, items):
+    item_tuple =  tuple(','.join(items).split(','))
+    questionmarks = '?' * len(item_tuple)
+    item_tuple = (list, ) + item_tuple
+    query = '''
+                UPDATE home_items
+                SET list_id = ?, needed = quantity
+                WHERE id IN ({})
+                '''.format(','.join(questionmarks))
+
+    db.execute(query, item_tuple)
+    connection.commit()
+
+def remove_item_from_list(db, connection, id, items_to_remove):
+    item_tuple =  tuple(','.join(items_to_remove).split(','))
+    questionmarks = '?' * len(item_tuple)
+    query = '''
+                UPDATE home_items
+                SET list_id = NULL
+                WHERE id IN ({})
+                '''.format(','.join(questionmarks))
+
+    db.execute(query, item_tuple)
+    connection.commit()
 
 def get_item(db, id):
     db.execute('''
@@ -70,7 +102,7 @@ def delete_item(db, connection, item_id):
 
 def get_home_items(db, home_id, category_id):
     db.execute('''
-                SELECT home_items.id, home_items.item_name, home_items.quantity, categories.category, home_items.alert_threshold
+                SELECT home_items.id, home_items.item_name, home_items.quantity, categories.category, home_items.alert_threshold, home_items.list_id, needed
                 FROM home_items
                 JOIN categories ON categories.id = home_items.category
                 WHERE home_items.home = ? AND categories.category = ?

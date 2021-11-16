@@ -27,6 +27,13 @@ def create_list():
     
     return database.create_list(title, tasked_user, home, is_complete, start_date, end_date)
 
+@list_routes.route('lists/updateitems/<id>', methods=['PUT'])
+def update_list(id):
+    data = request.form
+    items = json.loads(data['items'])
+    
+    database.update_list(id, items)
+    return json.dumps(database.get_list_by_id(id))
 # /lists/mine/id
 #   Gets user lists (pass userID as query param)
 

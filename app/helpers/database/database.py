@@ -237,17 +237,41 @@ def get_lists():
     return list_queries.get_all_lists(db)
 
 def get_lists_in_home(home):
-    return list_queries.get_lists_from_home(db, home)
+    lists = list_queries.get_lists_from_home(db, home)
+    for l in lists:
+        l['items'] = item_queries.get_items_in_list(db, l['id'])
+    return lists
+
+def get_list_by_id(id):
+    lists = list_queries.get_list_by_id(db, id)
+    lists['items'] = item_queries.get_items_in_list(db, lists['id'])
+    return lists
 
 def create_list(title, tasked_user, home, is_complete, start_date, end_date):
     user = get_user_by_id(tasked_user)
     if user:
-        print(user)
         liss = list_queries.create_list(db, connection, title, tasked_user, home, start_date, end_date, is_complete)
-        print(liss)
+        liss['items'] = item_queries.get_items_in_list(db, liss['id'])
         return liss
 
     abort(404)
+
+def update_list(id, items):
+    current_list = list_queries.get_list_by_id(db, id)
+    if (current_list):
+        items_in_list = item_queries.get_items_in_list(db, id)
+
+        new_item_ids = list(map(lambda item: str(item['id']), items))
+        list_item_ids = list(map(lambda item: str(item['id']), items_in_list))
+        print(new_item_ids, list_item_ids)
+       
+        items_to_remove = []
+        for item in list_item_ids:
+            if item not in new_item_ids:
+                items_to_remove.append(item)
+        item_queries.add_item_to_list(db, connection, id, new_item_ids)
+        item_queries.remove_item_from_list(db, connection, id, items_to_remove)
+    return
 
 ###########################
 # DATABASE INITIALIZATION #

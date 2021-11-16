@@ -51,7 +51,8 @@ def create_tables(db):
                     category INTEGER NOT NULL,
                     alert_threshold INTEGER,
                     list_id INTEGER DEFAULT(0),
-
+                    needed INTEGER,
+                    
                     FOREIGN KEY(home) REFERENCES homes(id)
                     FOREIGN KEY(category) REFERENCES categories(id)
                 )
