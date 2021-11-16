@@ -50,6 +50,7 @@ def create_tables(db):
                     item_name VARCHAR(64),
                     category INTEGER NOT NULL,
                     alert_threshold INTEGER,
+                    list_id INTEGER DEFAULT(0),
 
                     FOREIGN KEY(home) REFERENCES homes(id)
                     FOREIGN KEY(category) REFERENCES categories(id)
@@ -74,6 +75,22 @@ def create_tables(db):
                     FOREIGN KEY (home) REFERENCES homes(id),
                     CHECK(email LIKE '%@%.%')
                     PRIMARY KEY (email, home)
+                );
+                ''')
+
+    # List table
+    db.execute('''
+                CREATE TABLE IF NOT EXISTS lists (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title VARCHAR(128) NOT NULL,
+                    tasked_user INTEGER NOT NULL,
+                    home INTEGER NOT NULL,
+                    date_tasked DATETIME DEFAULT(CURRENT_TIMESTAMP),
+                    date_due DATETIME NOT NULL,
+                    is_complete CHAR(1) NOT NULL DEFAULT('F'),
+
+                    FOREIGN KEY (tasked_user) REFERENCES users(id)
+                    FOREIGN KEY (home) REFERENCES homes(id)
                 );
                 ''')
 

@@ -1,12 +1,31 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from app.helpers.database import database
+import datetime
+import json
 
 list_routes = Blueprint('list', __name__, url_prefix='')
 
 @list_routes.route('/lists', methods=['GET'])
-def get_default():
-    return {
-        'lists': []
-    }
+def get_default_lists():
+    return json.dumps(database.get_lists())
+
+@list_routes.route('/lists/home/<id>', methods=['GET'])
+def get_lists_from_home(id):
+    return json.dumps(database.get_lists_in_home(id))
+
+@list_routes.route('/lists/create', methods=['POST'])
+def create_list():
+    data = data = request.form
+    print(data)
+    format = "%m/%d/%Y" 
+    title = data['title']
+    tasked_user = data['taskedUserID']
+    home = data['home']
+    is_complete = True if data['isComplete'] == 'true' else False
+    start_date = datetime.datetime.strptime(data['dateTasked'], format)
+    end_date = datetime.datetime.strptime(data['dateDue'], format)
+    
+    return database.create_list(title, tasked_user, home, is_complete, start_date, end_date)
 
 # /lists/mine/id
 #   Gets user lists (pass userID as query param)

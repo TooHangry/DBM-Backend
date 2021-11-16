@@ -1,9 +1,12 @@
+from os import abort
+from sqlite3 import dbapi2
 from app.helpers.database import tables
 from app.helpers.item import queries as item_queries
 from app.helpers.home import queries as home_queries
 from app.helpers.user import queries as user_queries
 from app.helpers.invite import queries as invite_queries
 from app.helpers.email import email as email_helper
+from app.helpers.lists import queries as list_queries
 import sqlite3
 import itertools
 # Running on a single thread
@@ -226,6 +229,26 @@ def get_invites_for_user(email):
 
 def get_invite(email, home_id):
     return invite_queries.get_invite(db, email, home_id)
+
+################
+# LIST QUERIES #
+################
+def get_lists():
+    return list_queries.get_all_lists(db)
+
+def get_lists_in_home(home):
+    return list_queries.get_lists_from_home(db, home)
+
+def create_list(title, tasked_user, home, is_complete, start_date, end_date):
+    user = get_user_by_id(tasked_user)
+    if user:
+        print(user)
+        liss = list_queries.create_list(db, connection, title, tasked_user, home, start_date, end_date, is_complete)
+        print(liss)
+        return liss
+
+    abort(404)
+
 ###########################
 # DATABASE INITIALIZATION #
 ###########################
