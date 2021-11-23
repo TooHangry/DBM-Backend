@@ -240,23 +240,32 @@ def get_lists_in_home(home):
     lists = list_queries.get_lists_from_home(db, home)
     for l in lists:
         l['items'] = item_queries.get_items_in_list(db, l['id'])
+        l['taskedUserEmail'] = user_queries.get_user_by_id(db, l['taskedUser'])['email']
     return lists
 
 def get_list_by_id(id):
     lists = list_queries.get_list_by_id(db, id)
     lists['items'] = item_queries.get_items_in_list(db, lists['id'])
+    lists['taskedUserEmail'] = user_queries.get_user_by_id(db, lists['taskedUser'])['email']
     return lists
 
-def create_list(title, tasked_user, home, is_complete, start_date, end_date):
+def create_list(title, tasked_user, home, is_complete, end_date):
     user = get_user_by_id(tasked_user)
     if user:
-        liss = list_queries.create_list(db, connection, title, tasked_user, home, start_date, end_date, is_complete)
-        liss['items'] = item_queries.get_items_in_list(db, liss['id'])
-        return liss
+        lists = list_queries.create_list(db, connection, title, tasked_user, home, end_date, is_complete)
+        lists['items'] = item_queries.get_items_in_list(db, lists['id'])
+        lists['taskedUserEmail'] = user_queries.get_user_by_id(db, lists['taskedUser'])['email']
+        return lists
 
     abort(404)
 
-def update_list(id, items):
+def remove_list(id):
+    list = get_list_by_id(id)
+    item_queries.reset_list_status(db, connection, id)
+    list_queries.remove_list(db, connection, id)
+    return get_lists_in_home(list['homeID'])
+
+def update_list(id, items, user, title):
     current_list = list_queries.get_list_by_id(db, id)
     if (current_list):
         items_in_list = item_queries.get_items_in_list(db, id)
@@ -275,6 +284,13 @@ def update_list(id, items):
             item_needed_count = [item for item in items if int(item['id']) == int(item_id)]
             if len(item_needed_count) > 0:
                 item_queries.add_item_to_list(db, connection, id,item_id, item_needed_count[0]['needed'])
+        
+        is_complete = len(items) == 0;
+        for item in items:
+            if int(item['needed']) > int(item['quantity']):
+                is_complete = False
+        print(is_complete)
+        list_queries.update_user_and_title(db, connection, id, user, title, 'T' if is_complete else 'F')
     return
 
 ###########################

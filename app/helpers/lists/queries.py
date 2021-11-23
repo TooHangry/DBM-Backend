@@ -8,6 +8,12 @@ def get_all_lists(db):
                 ''')
     return serializers.serialize_lists(db.fetchall())
 
+def remove_list(db, connection, id):
+    db.execute('''
+            DELETE FROM lists
+            WHERE id = ?
+            ''', (id, ))
+    connection.commit()
 
 def get_lists_from_home(db, home):
     db.execute('''
@@ -28,11 +34,11 @@ def get_list_by_id(db, id):
     return lists[0] if len(lists) > 0 else []
 
 
-def create_list(db, connection, title, tasked_user_id, home_id, date_tasked, date_due, is_complete):
+def create_list(db, connection, title, tasked_user_id, home_id, date_due, is_complete):
     db.execute('''
-                INSERT INTO lists (title, tasked_user, home, date_tasked, date_due, is_complete)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ''', (title, tasked_user_id, home_id, date_tasked, date_due, is_complete, ))
+                INSERT INTO lists (title, tasked_user, home, date_due, is_complete)
+                VALUES (?, ?, ?, ?, ?)
+                ''', (title, tasked_user_id, home_id, date_due, is_complete, ))
     connection.commit()
 
     db.execute('''
@@ -43,6 +49,13 @@ def create_list(db, connection, title, tasked_user_id, home_id, date_tasked, dat
     lists = serializers.serialize_lists(db.fetchall())
     return lists[0] if len(lists) > 0 else []
 
+def update_user_and_title(db, connection, id, user, title, is_complete):
+    db.execute('''
+                UPDATE lists 
+                SET tasked_user = ?, title = ?, is_complete = ?
+                WHERE id = ?;
+                ''', (user, title, is_complete, id ))
+    connection.commit()
 
 def get_list_by_id(db, list):
     db.execute('''

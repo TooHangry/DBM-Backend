@@ -53,6 +53,14 @@ def get_items_in_list(db, list):
                 ''', (list, ))
     return serializers.serialize_items(db.fetchall())
 
+def reset_list_status(db, connection, list_id):
+    db.execute('''
+                UPDATE home_items
+                SET list_id = 0, needed = 0
+                WHERE list_id = ?
+                ''', (list_id, ))
+    connection.commit()
+
 def add_item_to_list(db, connection, list_id, item_id, needed_count):
     db.execute('''
                 UPDATE home_items
