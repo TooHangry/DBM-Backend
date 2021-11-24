@@ -1,3 +1,4 @@
+import datetime
 import smtplib
 import ssl
 import config as config
@@ -48,5 +49,15 @@ def send_collab_notice(user, home, admin):
         client.send([user['email']], subject, body)
     except:
         print('Something went wrong while sending collab notice')
+    return
 
+def send_list_notice(user, home, title, end):
+    subject = f"New Shopping List for {home['nickname']}!"
+    body = f'''Dear {user['fname']},\n\nYou have been assigned to a new shopping list due by {datetime.date.strftime(end, "%m/%d/%Y")}.\nClick the link below to view your lists. You will see the new list ("{title}") listed in your "lists" tab!\n\nClick or copy the link http://174.104.209.51:3000/lists to continue.\n\nYour pals,\nRobert, Tyler, and Brendon\nHome Manager 2021'''
+
+    try:
+        client = Mail()
+        client.send([user['email']], subject, body)
+    except:
+        print('Something went wrong while sending collab notice')
     return

@@ -254,7 +254,9 @@ def create_list(title, tasked_user, home, is_complete, end_date):
     if user:
         lists = list_queries.create_list(db, connection, title, tasked_user, home, end_date, is_complete)
         lists['items'] = item_queries.get_items_in_list(db, lists['id'])
-        lists['taskedUserEmail'] = user_queries.get_user_by_id(db, lists['taskedUser'])['email']
+        lists['taskedUserEmail'] = user['email']
+        h = get_home(home)
+        email_helper.send_list_notice(user, h, title, end_date)
         return lists
 
     abort(404)
