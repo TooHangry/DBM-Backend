@@ -241,12 +241,22 @@ def get_lists_in_home(home):
     for l in lists:
         l['items'] = item_queries.get_items_in_list(db, l['id'])
         l['taskedUserEmail'] = user_queries.get_user_by_id(db, l['taskedUser'])['email']
+        l['homeName'] = home_queries.get_home(db, l['homeID'])['nickname']
     return lists
 
 def get_list_by_id(id):
     lists = list_queries.get_list_by_id(db, id)
     lists['items'] = item_queries.get_items_in_list(db, lists['id'])
     lists['taskedUserEmail'] = user_queries.get_user_by_id(db, lists['taskedUser'])['email']
+    lists['homeName'] = home_queries.get_home(db, lists['homeID'])['nickname']
+    return lists
+
+def get_user_lists(id):
+    lists = list_queries.get_user_lists(db, id)
+    for l in lists:
+        l['items'] = item_queries.get_items_in_list(db, l['id'])
+        l['taskedUserEmail'] = user_queries.get_user_by_id(db, l['taskedUser'])['email']
+        l['homeName'] = home_queries.get_home(db, l['homeID'])['nickname']
     return lists
 
 def create_list(title, tasked_user, home, is_complete, end_date):
@@ -255,6 +265,7 @@ def create_list(title, tasked_user, home, is_complete, end_date):
         lists = list_queries.create_list(db, connection, title, tasked_user, home, end_date, is_complete)
         lists['items'] = item_queries.get_items_in_list(db, lists['id'])
         lists['taskedUserEmail'] = user['email']
+        lists['homeName'] = home_queries.get_home(db, lists['homeID'])['nickname']
         h = get_home(home)
         email_helper.send_list_notice(user, h, title, end_date)
         return lists
@@ -289,10 +300,8 @@ def update_list(id, items, user, title):
         
         is_complete = True
         for item in items:
-            print(item)
             if int(item['needed'] if item['needed'] else 0) > int(item['quantity'] if item['quantity'] else 0):
                 is_complete = False
-        print(is_complete)
         list_queries.update_user_and_title(db, connection, id, user, title, 'T' if is_complete else 'F')
     return
 

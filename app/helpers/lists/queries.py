@@ -23,6 +23,14 @@ def get_lists_from_home(db, home):
                 ''', (home, ))
     return serializers.serialize_lists(db.fetchall())
 
+def get_user_lists(db, id):
+    db.execute('''
+                SELECT *
+                FROM lists
+                WHERE tasked_user = ?
+                ''', (id, ))
+    return serializers.serialize_lists(db.fetchall())
+
 
 def get_list_by_id(db, id):
     db.execute('''

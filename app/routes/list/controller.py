@@ -11,9 +11,9 @@ def get_default_lists():
 
 @list_routes.route('/lists/remove/<id>', methods=['DELETE'])
 def remove_list(id):
-    print(id)
+    list_value = database.get_list_by_id(id)
     database.remove_list(id)
-    return json.dumps(database.get_lists())
+    return json.dumps(database.get_lists_in_home(list_value['homeID']))
 
 @list_routes.route('/lists/home/<id>', methods=['GET'])
 def get_lists_from_home(id):
@@ -40,17 +40,7 @@ def update_list(id):
 
     database.update_list(id, items, user, title)
     return json.dumps(database.get_list_by_id(id))
-# /lists/mine/id
-#   Gets user lists (pass userID as query param)
 
-# /lists/home/id
-#   Gets lists in a home (pass in homeIDas query param)
-
-# /lists/add
-#   Create a new list (pass in formdata with name, homeID, adminID, etc.)
-
-# /lists/remove/id
-#   Delete home with id from query param
-
-# /lists/update/id
-#   Update the list at 'id' with passed-in form data
+@list_routes.route('lists/mine/<id>', methods=['GET'])
+def get_user_lists(id):
+    return json.dumps(database.get_user_lists(id))
