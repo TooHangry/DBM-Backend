@@ -283,11 +283,12 @@ def update_list(id, items, user, title):
         for item_id in new_item_ids:
             item_needed_count = [item for item in items if int(item['id']) == int(item_id)]
             if len(item_needed_count) > 0:
-                item_queries.add_item_to_list(db, connection, id,item_id, item_needed_count[0]['needed'])
+                item_queries.add_item_to_list(db, connection, id, item_id, item_needed_count[0]['needed'])
         
-        is_complete = len(items) == 0;
+        is_complete = True
         for item in items:
-            if int(item['needed']) > int(item['quantity']):
+            print(item)
+            if int(item['needed'] if item['needed'] else 0) > int(item['quantity'] if item['quantity'] else 0):
                 is_complete = False
         print(is_complete)
         list_queries.update_user_and_title(db, connection, id, user, title, 'T' if is_complete else 'F')
