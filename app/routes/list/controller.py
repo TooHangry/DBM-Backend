@@ -44,3 +44,11 @@ def update_list(id):
 @list_routes.route('lists/mine/<id>', methods=['GET'])
 def get_user_lists(id):
     return json.dumps(database.get_user_lists(id))
+
+@list_routes.route('lists/shop/<id>', methods=['PUT'])
+def update_list_shop(id):
+    data = request.form
+    items = json.loads(data['items'])
+
+    database.update_list_items(id, items)
+    return json.dumps(database.get_list_by_id(id))

@@ -20,6 +20,13 @@ def update_item(db, connection, item_id, name, quantity, threshold, category_id,
                 ''', (home_id, quantity, name, category_id, threshold, item_id))
     connection.commit()
 
+def update_item_in_list(db, connection, id, quantity):
+    db.execute('''
+                UPDATE home_items
+                SET quantity = ?
+                WHERE id = ?
+                ''', (quantity, id, ))
+    connection.commit()
 
 def get_category(db, category):
     db.execute('''

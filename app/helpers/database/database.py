@@ -305,6 +305,13 @@ def update_list(id, items, user, title):
         list_queries.update_user_and_title(db, connection, id, user, title, 'T' if is_complete else 'F')
     return
 
+def update_list_items(id, items):
+    current_list = list_queries.get_list_by_id(db, id)
+    if (current_list):
+        for item in items:
+            item_queries.update_item_in_list(db, connection, item['id'], item['quantity'])
+        
+
 ###########################
 # DATABASE INITIALIZATION #
 ###########################
