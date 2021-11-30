@@ -311,7 +311,8 @@ def update_list_items(id, items):
         for item in items:
             item_queries.update_item_in_list(db, connection, item['id'], item['quantity'])
         
-
+def get_all_lists():
+    return list_queries.get_all_lists(db)
 ###########################
 # DATABASE INITIALIZATION #
 ###########################
