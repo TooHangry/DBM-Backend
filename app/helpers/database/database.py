@@ -9,6 +9,7 @@ from app.helpers.email import email as email_helper
 from app.helpers.lists import queries as list_queries
 import sqlite3
 import itertools
+
 # Running on a single thread
 connection = sqlite3.connect('db.sqlite3', timeout=10, check_same_thread=False)
 db = connection.cursor()
